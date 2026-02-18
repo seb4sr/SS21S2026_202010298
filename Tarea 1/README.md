@@ -174,11 +174,7 @@ Quetzaltenango            39000    41000    38000     37000
 **Screenshot 1 - Ejecución del script completado:**
 ![Ejecución del script completado](https://github.com/seb4sr/SS21S2026_202010298/blob/main/Tarea%201/images/image.png)
 
-**Screenshot 2 - Dataset limpio cargado en editor:**
-[Insertar imagen5 aquí - Vista del CSV]
 
-**Screenshot 3 - Validación de estructura de datos:**
-[Insertar imagen6 aquí - info() y describe()]
 
 ---
 
@@ -194,6 +190,3 @@ Quetzaltenango            39000    41000    38000     37000
 
 ---
 
-**Autor:** 202010298  
-**Fecha:** Febrero 2026  
-**Materia:** Seminario de Sistemas 2
