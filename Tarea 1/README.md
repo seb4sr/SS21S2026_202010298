@@ -102,7 +102,7 @@ Conversión y normalización de formato de fechas:
 
 #### **4.2 Distribución de Gasto**
 
-![Histograma de Distribución de Gasto](https://github.com/sebas202010298/SS21S2026_202010298/blob/main/Tarea%201/images/grafica_1_histograma_gasto.png?raw=true)
+![Histograma de Distribución de Gasto](https://github.com/seb4sr/SS21S2026_202010298/blob/main/Tarea%201/grafica_1_histograma_gasto.png)
 
 **Interpretación:**
 - La distribución muestra un comportamiento **multimodal** con una concentración significativa alrededor de **Q.280-300**
