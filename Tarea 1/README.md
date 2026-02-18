@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Tarea 1: Limpieza y Análisis Inicial con Pandas
+## Tarea 1: Limpieza y Análisis Inicial con Pandas
 
 ### 1. Descripción de la Actividad
 
@@ -16,14 +16,14 @@ Esta tarea busca desarrollar habilidades en **limpieza de datos** y **análisis 
 
 ### 2. Objetivos
 
-- ✅ Eliminar registros duplicados
-- ✅ Tratar valores faltantes (NaN) y celdas vacías
-- ✅ Estandarizar formatos y valores de texto
-- ✅ Limpiar y validar datos numéricos
-- ✅ Procesar y normalizar fechas
-- ✅ Generar tablas pivote para análisis
-- ✅ Crear visualizaciones significativas
-- ✅ Documentar el proceso y resultados
+- Eliminar registros duplicados
+- Tratar valores faltantes (NaN) y celdas vacías
+- Estandarizar formatos y valores de texto
+- Limpiar y validar datos numéricos
+- Procesar y normalizar fechas
+- Generar tablas pivote para análisis
+- Crear visualizaciones significativas
+- Focumentar el proceso y resultados
 
 ---
 
