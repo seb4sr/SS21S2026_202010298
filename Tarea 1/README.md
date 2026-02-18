@@ -172,7 +172,7 @@ Quetzaltenango            39000    41000    38000     37000
 *Espacio para capturas de seguimiento de ejecución:*
 
 **Screenshot 1 - Ejecución del script completado:**
-[Insertar imagen4 aquí - Output de consola]
+![Ejecución del script completado](https://github.com/seb4sr/SS21S2026_202010298/blob/main/Tarea%201/images/image.png)
 
 **Screenshot 2 - Dataset limpio cargado en editor:**
 [Insertar imagen5 aquí - Vista del CSV]
