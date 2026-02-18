@@ -117,7 +117,7 @@ Conversión y normalización de formato de fechas:
 
 #### **4.3 Gasto Total por Ciudad**
 
-![Gasto Total por Ciudad](https://github.com/sebas202010298/SS21S2026_202010298/blob/main/Tarea%201/images/grafica_2_gasto_total_ciudad.png?raw=true)
+![Gasto Total por Ciudad](https://github.com/seb4sr/SS21S2026_202010298/blob/main/Tarea%201/images/grafica_2_gasto_total_ciudad.png)
 
 **Interpretación:**
 - **Quetzaltenango** lidera con el gasto total más alto (~Q.155,000)
@@ -129,7 +129,7 @@ Conversión y normalización de formato de fechas:
 
 #### **4.4 Conteo por Categoría**
 
-![Conteo por Categoría](https://github.com/sebas202010298/SS21S2026_202010298/blob/main/Tarea%201/images/grafica_3_conteo_categoria.png?raw=true)
+![Conteo por Categoría](https://github.com/seb4sr/SS21S2026_202010298/blob/main/Tarea%201/images/grafica_3_conteo_categoria.png)
 
 **Interpretación:**
 - Las 4 categorías principales (**Food, Retail, Education, Services**) tienen **distribución balanceada**
