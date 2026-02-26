@@ -216,16 +216,9 @@ Validaciones recomendadas para una versión robusta:
 
 ---
 
-## 12) Riesgos técnicos identificados
 
-- Al usar `if_exists='append'`, múltiples ejecuciones pueden duplicar información.
-- No hay llaves únicas sobre códigos de dimensiones (`codigo_pasajero`, `codigo_iata`, etc.).
-- El parseo mixto de fechas puede aceptar formatos heterogéneos; requiere monitoreo.
-- Para vuelos cancelados pueden existir métricas nulas (duración/retraso), impactando promedios.
 
----
-
-## 13) Resultado final
+## 12) Resultado final
 
 La práctica implementa un flujo ETL funcional y reproducible para análisis de vuelos en un esquema estrella, habilitando consultas de rendimiento operacional y de negocio sobre `Fact_Vuelos` y sus dimensiones.
 
