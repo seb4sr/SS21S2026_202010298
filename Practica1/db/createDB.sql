@@ -5,9 +5,7 @@ GO
 USE Vuelos_Practica1;
 GO
 
--- ==========================================
--- 2. CREACIÓN DE TABLAS DE DIMENSIONES (Se mantienen igual)
--- ==========================================
+
 CREATE TABLE Dim_Tiempo (
     id_tiempo INT PRIMARY KEY IDENTITY(1,1),
     fecha DATE NOT NULL,
@@ -40,37 +38,30 @@ CREATE TABLE Dim_Aerolinea (
 );
 GO
 
--- ==========================================
--- 3. TABLA DE HECHOS (¡Mejorada para tu dataset!)
--- ==========================================
+
 CREATE TABLE Fact_Vuelos (
     id_hecho_vuelo INT PRIMARY KEY IDENTITY(1,1),
     
-    -- Llaves foráneas
     id_tiempo INT NOT NULL,
     id_pasajero INT NOT NULL,
     id_origen INT NOT NULL,
     id_destino INT NOT NULL,
     id_aerolinea INT NOT NULL,
     
-    -- Dimensiones Degeneradas (Detalles directos del vuelo)
     numero_vuelo VARCHAR(20),
     clase_cabina VARCHAR(50),
     canal_venta VARCHAR(50),
     metodo_pago VARCHAR(50),
     estado_vuelo VARCHAR(50),
     
-    -- Métricas / Hechos Reales del CSV
     duracion_minutos FLOAT,
     retraso_minutos FLOAT,
     precio_boleto_usd FLOAT,
     total_maletas INT,
     maletas_documentadas INT,
     
-    -- Métrica base para conteos
     cantidad_vuelos INT DEFAULT 1,
     
-    -- Relaciones
     CONSTRAINT FK_Fact_Tiempo FOREIGN KEY (id_tiempo) REFERENCES Dim_Tiempo(id_tiempo),
     CONSTRAINT FK_Fact_Pasajero FOREIGN KEY (id_pasajero) REFERENCES Dim_Pasajero(id_pasajero),
     CONSTRAINT FK_Fact_Origen FOREIGN KEY (id_origen) REFERENCES Dim_Aeropuerto(id_aeropuerto),
