@@ -72,3 +72,12 @@ GO
 
 UPDATE Dim_Pasajero SET genero = 'Masculino' WHERE genero IN ('M', 'MASCULINO');
 UPDATE Dim_Pasajero SET genero = 'Femenino' WHERE genero IN ('F', 'FEMENINO');
+ 
+
+ --limpiar todas las tablas para evitar problemas de carga con truncate
+    TRUNCATE TABLE Fact_Vuelos;
+    TRUNCATE TABLE Dim_Tiempo;
+    TRUNCATE TABLE Dim_Pasajero;
+    TRUNCATE TABLE Dim_Aeropuerto;
+    TRUNCATE TABLE Dim_Aerolinea;
+GO

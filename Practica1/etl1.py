@@ -22,7 +22,7 @@ engine = create_engine(f"mssql+pyodbc:///?odbc_connect={params}")
 
 with engine.connect() as conn:
     conn.exec_driver_sql("SELECT 1;")
-print("✅ Conexión OK a SQL Server")
+print("Conexión OK a SQL Server")
 
 
 #etapa 1: Carga de datos/extraccion
@@ -43,6 +43,7 @@ for col in columnas_texto:
 # Manejo de fechas
 df_vuelos['departure_datetime'] = pd.to_datetime(df_vuelos['departure_datetime'], format='mixed', dayfirst=True)
 df_vuelos['fecha_dt'] = df_vuelos['departure_datetime'].dt.date
+#parcear funcion para las fechas de diferentes formatos.
 
 #carga a las tablas de dimensiones
 print("3. insertando datos en tablas de dimensiones")
