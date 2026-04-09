@@ -53,8 +53,7 @@
               "ToolTip": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Cliente.dim [Design]",
               "RelativeToolTip": "SSAS_SGFood\\Dim Cliente.dim [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-04-09T05:09:31.005Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-04-09T05:09:31.005Z"
             },
             {
               "$type": "Document",
@@ -65,8 +64,7 @@
               "ToolTip": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Fecha.dim [Design]",
               "RelativeToolTip": "SSAS_SGFood\\Dim Fecha.dim [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-04-09T05:03:07.752Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-04-09T05:03:07.752Z"
             },
             {
               "$type": "Document",
@@ -88,8 +86,7 @@
               "ToolTip": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\DW SG Food.cube [Design]",
               "RelativeToolTip": "SSAS_SGFood\\DW SG Food.cube [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-04-09T05:02:19.609Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-04-09T05:02:19.609Z"
             }
           ]
         }
