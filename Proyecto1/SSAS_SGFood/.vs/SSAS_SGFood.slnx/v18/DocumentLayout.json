@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Producto.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design",
-      "RelativeMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|solutionrelative:SSAS_SGFood\\Dim Producto.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Fecha.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design",
       "RelativeMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|solutionrelative:SSAS_SGFood\\Dim Fecha.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Cliente.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design",
-      "RelativeMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|solutionrelative:SSAS_SGFood\\Dim Cliente.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\DW SG Food.cube||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design",
@@ -21,6 +13,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\DW SG Food.dsv||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design",
       "RelativeMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|solutionrelative:SSAS_SGFood\\DW SG Food.dsv||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Producto.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design",
+      "RelativeMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|solutionrelative:SSAS_SGFood\\Dim Producto.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Cliente.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design",
+      "RelativeMoniker": "D:0:0:{F0B661AA-3BB4-A4C2-0678-453629F6CC7E}|SSAS_SGFood\\SSAS_SGFood.dwproj|solutionrelative:SSAS_SGFood\\Dim Cliente.dim||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,11 +30,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Dim Producto.dim [Design]",
               "DocumentMoniker": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Producto.dim",
               "RelativeDocumentMoniker": "SSAS_SGFood\\Dim Producto.dim",
@@ -46,7 +46,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Dim Cliente.dim [Design]",
               "DocumentMoniker": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Cliente.dim",
               "RelativeDocumentMoniker": "SSAS_SGFood\\Dim Cliente.dim",
@@ -57,36 +57,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Dim Fecha.dim [Design]",
               "DocumentMoniker": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Fecha.dim",
               "RelativeDocumentMoniker": "SSAS_SGFood\\Dim Fecha.dim",
               "ToolTip": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\Dim Fecha.dim [Design]",
               "RelativeToolTip": "SSAS_SGFood\\Dim Fecha.dim [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-04-09T05:03:07.752Z"
+              "WhenOpened": "2026-04-09T05:03:07.752Z",
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "DW SG Food.dsv [Design]",
               "DocumentMoniker": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\DW SG Food.dsv",
               "RelativeDocumentMoniker": "SSAS_SGFood\\DW SG Food.dsv",
               "ToolTip": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\DW SG Food.dsv [Design]",
               "RelativeToolTip": "SSAS_SGFood\\DW SG Food.dsv [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-04-09T05:00:59.199Z"
+              "WhenOpened": "2026-04-09T05:00:59.199Z",
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "DW SG Food.cube [Design]",
               "DocumentMoniker": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\DW SG Food.cube",
               "RelativeDocumentMoniker": "SSAS_SGFood\\DW SG Food.cube",
               "ToolTip": "C:\\Users\\sebas\\OneDrive\\Escritorio\\Universidad\\1 2026\\Seminario2\\Repositorio\\SS21S2026_202010298\\Proyecto1\\SSAS_SGFood\\SSAS_SGFood\\DW SG Food.cube [Design]",
               "RelativeToolTip": "SSAS_SGFood\\DW SG Food.cube [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-04-09T05:02:19.609Z"
+              "WhenOpened": "2026-04-09T05:02:19.609Z",
+              "EditorCaption": " [Design]"
             }
           ]
         }
