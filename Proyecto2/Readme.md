@@ -3,6 +3,7 @@
 **Proyecto 2 — Seminario de Sistemas 2**
 Universidad de San Carlos de Guatemala — Facultad de Ingeniería
 **Integrante:** Sebastian Sandoval — Carnet 202010298
+**Integrante:** Daniel Guzmán — Carnet 202111612
 **Fecha:** Abril 2026
 **Proyecto GCP:** `corded-evening-493205-n7`
 
@@ -28,7 +29,7 @@ El dataset contiene **36,256,539 registros** originales. Sin embargo, durante la
 
 Todos los scripts SQL del repositorio utilizan el esquema real del dataset 2022: **`pickup_datetime`**, **`dropoff_datetime`**, **`pickup_location_id`** y **`dropoff_location_id`**.
 
-![Muestra de datos crudos del dataset público](images/Screenshot%202026-04-27%20231853.png)
+![Muestra de datos crudos del dataset público](images/esquema_viste_previa.png)
 
 ### Columnas relevantes
 
@@ -122,7 +123,7 @@ La función `MIN()` y `MAX()` sobre un campo `TIMESTAMP` devuelven el timestamp 
 
 **Insight producido:** El dataset tiene 36,256,539 registros pero una contaminación temporal significativa que invalida cualquier análisis sin filtro de fecha explícito. Esta consulta justifica el filtro `pickup_datetime BETWEEN '2022-01-01' AND '2022-12-31'` aplicado en `tabla_derivada.sql`.
 
-![Resultado de exploracion.sql: total de registros y rango real de fechas](images/Screenshot%202026-04-27%20231301.png)
+![Resultado de exploracion.sql: total de registros y rango real de fechas](images/conteo_registros.png)
 
 ![Bytes procesados por exploracion.sql: 276.62 MB](images/bytes_consulta_inicial.png)
 
@@ -264,8 +265,6 @@ ORDER BY hora;
 **Insight producido:** Los patrones horarios revelan los picos de demanda en horarios de oficina y las horas valle de madrugada, información clave para modelar tarifas dinámicas o planificar la disponibilidad de flota.
 
 ![Resultado de consulta3.sql: viajes por hora del día](images/patrones_viaje_dia.png)
-
-![Vista complementaria de patrones temporales por hora](images/zca.png)
 
 ---
 
@@ -462,7 +461,7 @@ El proyecto incluye dos modelos predictivos entrenados con **BigQuery ML** sobre
 
 **Archivo:** [sql/bigquery_ml_modelo1_regresion.sql](sql/bigquery_ml_modelo1_regresion.sql)
 
-**Propósito:** Predecir la tarifa base de un viaje en function de variables como distancia, hora del día, zona de origen, número de pasajeros y período del día.
+**Propósito:** Predecir la tarifa base de un viaje en función de variables como distancia, hora del día, zona de origen, número de pasajeros y período del día.
 
 **Especificación técnica:**
 ```sql
@@ -494,6 +493,8 @@ OPTIONS(
 **Regularización aplicada:** L1 + L2 para prevenir overfitting al dataset histórico. Esto reduce la varianza del modelo a costa de un pequeño sesgo, lo que es deseable para generalización en producción.
 
 **Métricas esperadas:** RMSE (Root Mean Squared Error), MAE (Mean Absolute Error), R² Score. Estas se obtienen con `ML.EVALUATE()`.
+
+![Creación del modelo de regresión en BigQuery ML](images/ml_modelo_regresion_creado.png)
 
 ---
 
@@ -528,9 +529,11 @@ Esto simplifica el problema a un clasificador binario: tarjeta (1) vs otros (0).
 - Mismas variables que el modelo de regresión, excepto `fare_amount` se incluye aquí porque es medible antes de la predicción (información disponible en el momento de decisión del método de pago).
 - `tip_amount`: monto de propina (disponible en el evento histórico, pero no en el futuro; se usa solo para patrones en entrenamiento).
 
-**Balanceo de clases:** `class_weights=[('0', 1.0), ('1', 1.2)]` asigna un peso 20% mayor a la clase 1 (tarjeta). Esto compensan un posible desbalance: si  hay más pagos en efectivo, el modelo puede tender a predecir "efectivo" frecuentemente. El peso hace que errores en tarjeta sean más costosos durante el entrenamiento.
+**Balanceo de clases:** `class_weights=[('0', 1.0), ('1', 1.2)]` asigna un peso 20% mayor a la clase 1 (tarjeta). Esto compensa un posible desbalance: si hay más pagos en efectivo, el modelo puede tender a predecir "efectivo" frecuentemente. El peso hace que errores en tarjeta sean más costosos durante el entrenamiento.
 
 **Métricas esperadas:** ROC-AUC, Accuracy (precisión global), Precision (verdaderos positivos / positivos predichos), Recall (verdaderos positivos / positivos reales), Matriz de Confusión (TP, FP, TN, FN).
+
+![Creación del modelo de clasificación en BigQuery ML](images/ml_modelo_clasificacion_creado.png)
 
 ---
 
@@ -558,6 +561,10 @@ Matriz de confusión:
 Real=0         8500        1200
 Real=1         1000        4300
 ```
+
+![Evaluación del modelo de regresión](images/ml_evaluate_regresion.png)
+
+![Evaluación del modelo de clasificación](images/ml_evaluate_clasificacion.png)
 
 Interpretación: El modelo de clasificación predice tarjeta con alta precisión (85%) pero tiene recall de 70%, lo que significa deja pasar algunos casos de tarjeta reales. Esto es un compromiso típico en clasificación binaria: ajustar el threshold puede mejorar recall a costa de precisión.
 
@@ -601,6 +608,8 @@ Este script demuestra cómo usar ambos modelos para hacer predicciones sobre nue
    - Distribución: cuántas predicciones de tarjeta vs efectivo
    - Porcentaje de predicciones con alta confianza (prob >= 70%)
 
+![Muestra de predicciones con ML.PREDICT](images/ml_predict_muestra.png)
+
 ---
 
 ### Comparación entre Modelos y Selección Final
@@ -629,7 +638,7 @@ Para el **modelo de clasificación:**
 
 El dashboard de visualización del análisis fue construido en **Looker Studio** e incluye gráficas de distribución por hora, día de semana, método de pago y zonas geográficas sobre los datos de `viajes_limpios`, más visualizaciones de predicciones y métricas de modelos.
 
-> **Enlace al dashboard:** *(agregar URL de Looker Studio aquí)*
+> **Enlace al dashboard:** https://datastudio.google.com/reporting/220bc489-4230-42f1-b146-5a53ef28ef72
 
 ---
 
