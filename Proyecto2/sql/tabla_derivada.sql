@@ -1,5 +1,5 @@
 -- Tabla derivada con datos limpios y variables útiles
-CREATE OR REPLACE TABLE `TU_PROYECTO.proyecto2_taxi.viajes_limpios` AS
+CREATE OR REPLACE TABLE `corded-evening-493205-n7.proyecto2_taxi.viajes_limpios` AS
 SELECT
   pickup_datetime,
   dropoff_datetime,
@@ -18,7 +18,7 @@ SELECT
   EXTRACT(DAYOFWEEK FROM pickup_datetime)                        AS dia_semana,
   EXTRACT(MONTH FROM pickup_datetime)                            AS mes,
   CASE
-    WHEN EXTRACT(HOUR FROM pickup_datetime) BETWEEN 6 AND 11  THEN 'mañana'
+    WHEN EXTRACT(HOUR FROM pickup_datetime) BETWEEN 6 AND 11  THEN 'manana'
     WHEN EXTRACT(HOUR FROM pickup_datetime) BETWEEN 12 AND 17 THEN 'tarde'
     WHEN EXTRACT(HOUR FROM pickup_datetime) BETWEEN 18 AND 22 THEN 'noche'
     ELSE 'madrugada'

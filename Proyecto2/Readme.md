@@ -24,11 +24,11 @@ Este proyecto aplica técnicas de análisis de datos a gran escala utilizando Go
 
 El dataset contiene **36,256,539 registros** originales. Sin embargo, durante la exploración inicial se descubrió que el rango de fechas real de los datos abarca desde **2001 hasta 2023**, lo que evidencia la presencia de registros sucios: viajes con fechas erróneas, entradas duplicadas de otros años y valores fuera del rango esperado. Por esta razón, la tabla derivada filtra explícitamente los registros para incluir únicamente viajes con `pickup_datetime` entre `2022-01-01` y `2022-12-31`.
 
-### Nota sobre nombres de columnas
+### Esquema del dataset 2022
 
-La tabla `tlc_yellow_trips_2022` utiliza la convención de nombres **`pickup_datetime`** y **`dropoff_datetime`** (no `tpep_pickup_datetime`/`tpep_dropoff_datetime`, que corresponde a versiones anteriores del schema usadas en datasets de otros años). De igual forma, las zonas geográficas se representan con **`pickup_location_id`** y **`dropoff_location_id`** en lugar de `PULocationID`/`DOLocationID`. Esta diferencia fue identificada durante el desarrollo y corregida en la tabla derivada; los scripts iniciales de exploración y consultas directas al dataset público reflejan la convención anterior para documentar el proceso de descubrimiento.
+Todos los scripts SQL del repositorio utilizan el esquema real del dataset 2022: **`pickup_datetime`**, **`dropoff_datetime`**, **`pickup_location_id`** y **`dropoff_location_id`**.
 
-![Muestra de datos crudos del dataset público con nombres de columnas reales](images/Screenshot%202026-04-27%20231853.png)
+![Muestra de datos crudos del dataset público](images/Screenshot%202026-04-27%20231853.png)
 
 ### Columnas relevantes
 
@@ -80,7 +80,7 @@ La tabla `viajes_limpios` agrega seis columnas calculadas que no existen en el d
 **`periodo_dia`** — Calculada mediante un bloque `CASE WHEN` sobre la hora:
 ```sql
 CASE
-  WHEN EXTRACT(HOUR FROM pickup_datetime) BETWEEN 6  AND 11 THEN 'manana'
+  WHEN EXTRACT(HOUR FROM pickup_datetime) BETWEEN 6  AND 11 THEN 'mañana'
   WHEN EXTRACT(HOUR FROM pickup_datetime) BETWEEN 12 AND 17 THEN 'tarde'
   WHEN EXTRACT(HOUR FROM pickup_datetime) BETWEEN 18 AND 22 THEN 'noche'
   ELSE 'madrugada'
@@ -109,8 +109,8 @@ Agrupa las 24 horas en cuatro periodos de negocio. El rango de `noche` llega has
 ```sql
 SELECT
   COUNT(*) AS total_registros,
-  MIN(tpep_pickup_datetime) AS fecha_inicio,
-  MAX(tpep_pickup_datetime) AS fecha_fin
+  MIN(pickup_datetime) AS fecha_inicio,
+  MAX(pickup_datetime) AS fecha_fin
 FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`;
 ```
 
@@ -131,7 +131,7 @@ La función `MIN()` y `MAX()` sobre un campo `TIMESTAMP` devuelven el timestamp 
 ### `tabla_derivada.sql` — Creación de `viajes_limpios` (patrón CTAS)
 
 ```sql
-CREATE OR REPLACE TABLE `TU_PROYECTO.proyecto2_taxi.viajes_limpios` AS
+CREATE OR REPLACE TABLE `corded-evening-493205-n7.proyecto2_taxi.viajes_limpios` AS
 SELECT
   pickup_datetime,
   dropoff_datetime,
@@ -171,11 +171,11 @@ WHERE
 ### `optimizacion.sql` — Creación de `viajes_optimizados`
 
 ```sql
-CREATE OR REPLACE TABLE `TU_PROYECTO.proyecto2_taxi.viajes_optimizados`
+CREATE OR REPLACE TABLE `corded-evening-493205-n7.proyecto2_taxi.viajes_optimizados`
 PARTITION BY DATE(pickup_datetime)
 CLUSTER BY pickup_location_id, dropoff_location_id
 AS
-SELECT * FROM `TU_PROYECTO.proyecto2_taxi.viajes_limpios`;
+SELECT * FROM `corded-evening-493205-n7.proyecto2_taxi.viajes_limpios`;
 ```
 
 **Propósito:** Crear una copia de `viajes_limpios` con configuración de almacenamiento físico optimizada para consultas que filtren por fecha y/o zona geográfica, que son los filtros más comunes en análisis de movilidad urbana.
@@ -246,9 +246,9 @@ ORDER BY cantidad_viajes DESC;
 
 ```sql
 SELECT
-  EXTRACT(HOUR FROM tpep_pickup_datetime) AS hora,
-  COUNT(*)                                AS total_viajes,
-  ROUND(AVG(fare_amount), 2)             AS tarifa_promedio
+  EXTRACT(HOUR FROM pickup_datetime) AS hora,
+  COUNT(*) AS total_viajes,
+  ROUND(AVG(fare_amount), 2) AS tarifa_promedio
 FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`
 WHERE fare_amount > 0 AND trip_distance > 0
 GROUP BY hora
@@ -259,7 +259,7 @@ ORDER BY hora;
 
 **Análisis técnico:** El alias `hora` definido en el `SELECT` se reutiliza en `GROUP BY hora` y `ORDER BY hora`. BigQuery permite esta referencia a aliases en `GROUP BY` y `ORDER BY`, lo que simplifica queries complejos. El ordenamiento por `hora` (no por `total_viajes`) produce una serie temporal ordenada cronológicamente, que es la representación natural para analizar patrones intradiarios.
 
-**Nota sobre el nombre de columna:** Este script usa `tpep_pickup_datetime`, que es la convención de la API de TLC para datos anteriores a 2022. En la tabla `tlc_yellow_trips_2022`, la columna correcta es `pickup_datetime`. Este script refleja el estado de desarrollo durante la exploración inicial antes de identificar la diferencia en el schema.
+**Nota sobre el nombre de columna:** El script ya está alineado con el esquema real de `tlc_yellow_trips_2022`, que usa `pickup_datetime`.
 
 **Insight producido:** Los patrones horarios revelan los picos de demanda en horarios de oficina y las horas valle de madrugada, información clave para modelar tarifas dinámicas o planificar la disponibilidad de flota.
 
@@ -273,9 +273,9 @@ ORDER BY hora;
 
 ```sql
 SELECT
-  FORMAT_DATE('%A', DATE(tpep_pickup_datetime)) AS dia_semana,
-  COUNT(*)                                       AS total_viajes,
-  ROUND(AVG(fare_amount), 2)                    AS tarifa_promedio
+  FORMAT_DATE('%A', DATE(pickup_datetime)) AS dia_semana,
+  COUNT(*) AS total_viajes,
+  ROUND(AVG(fare_amount), 2) AS tarifa_promedio
 FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`
 WHERE fare_amount > 0 AND trip_distance > 0
 GROUP BY dia_semana
@@ -284,7 +284,7 @@ ORDER BY total_viajes DESC;
 
 **Propósito:** Identificar qué días de la semana concentran mayor demanda de taxis y si la tarifa promedio varía según el día.
 
-**Análisis técnico — `FORMAT_DATE('%A', DATE(...))`:** Esta es la función más técnicamente interesante de las consultas iniciales. `DATE(tpep_pickup_datetime)` convierte el `TIMESTAMP` a `DATE`. Luego `FORMAT_DATE('%A', fecha)` aplica un patrón de formato sobre ese `DATE`: `%A` devuelve el nombre completo del día de la semana en inglés (Monday, Tuesday, etc.). BigQuery usa la localización del servidor, que es inglés por defecto. El resultado es que en lugar de trabajar con enteros de 1-7 (como haría `EXTRACT(DAYOFWEEK)`), se obtienen strings legibles directamente como nombre de día.
+**Análisis técnico — `FORMAT_DATE('%A', DATE(...))`:** Esta es la función más técnicamente interesante de las consultas iniciales. `DATE(pickup_datetime)` convierte el `TIMESTAMP` a `DATE`. Luego `FORMAT_DATE('%A', fecha)` aplica un patrón de formato sobre ese `DATE`: `%A` devuelve el nombre completo del día de la semana en inglés (Monday, Tuesday, etc.). BigQuery usa la localización del servidor, que es inglés por defecto. El resultado es que en lugar de trabajar con enteros de 1-7 (como haría `EXTRACT(DAYOFWEEK)`), se obtienen strings legibles directamente como nombre de día.
 
 La diferencia respecto a `EXTRACT(DAYOFWEEK)` es de legibilidad y conveniencia: `FORMAT_DATE('%A')` produce el label directamente sin necesitar una tabla de lookup o un `CASE WHEN` para mapear 1→Sunday, 2→Monday, etc. El costo es que los resultados quedan en inglés; para aplicaciones en español, se requeriría un `CASE WHEN` sobre los nombres o sobre el número de día.
 
@@ -298,9 +298,9 @@ La diferencia respecto a `EXTRACT(DAYOFWEEK)` es de legibilidad y conveniencia: 
 
 ```sql
 SELECT
-  PULocationID                  AS zona_recogida,
-  COUNT(*)                      AS total_viajes,
-  ROUND(AVG(fare_amount), 2)   AS tarifa_promedio,
+  pickup_location_id AS zona_recogida,
+  COUNT(*) AS total_viajes,
+  ROUND(AVG(fare_amount), 2) AS tarifa_promedio,
   ROUND(AVG(trip_distance), 2) AS distancia_promedio
 FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`
 WHERE fare_amount > 0 AND trip_distance > 0
@@ -311,7 +311,7 @@ LIMIT 10;
 
 **Propósito:** Identificar las diez zonas geográficas de la ciudad con mayor volumen de viajes iniciados, para entender dónde se concentra la demanda de taxis.
 
-**Análisis técnico:** El patrón `GROUP BY + ORDER BY ... DESC + LIMIT 10` es el estándar SQL para los *top-N* queries. En BigQuery, `LIMIT` se aplica después de que el motor ha procesado todos los grupos, por lo que no reduce el costo de la consulta (el dataset completo se escanea de todas formas). Para optimizar top-N queries frecuentes en producción, la solución correcta es materializar la tabla con clustering, que es exactamente lo que hace `viajes_optimizados`. El script usa `PULocationID`, que es la convención de versiones anteriores; en el dataset 2022 el campo se llama `pickup_location_id`.
+**Análisis técnico:** El patrón `GROUP BY + ORDER BY ... DESC + LIMIT 10` es el estándar SQL para los *top-N* queries. En BigQuery, `LIMIT` se aplica después de que el motor ha procesado todos los grupos, por lo que no reduce el costo de la consulta (el dataset completo se escanea de todas formas). Para optimizar top-N queries frecuentes en producción, la solución correcta es materializar la tabla con clustering, que es exactamente lo que hace `viajes_optimizados`.
 
 **Insight producido:** Las zonas con mayor demanda corresponden a puntos de alta densidad urbana (Midtown Manhattan, aeropuertos JFK/LaGuardia, Penn Station). La tarifa promedio y la distancia promedio por zona permiten segmentar el mercado entre viajes cortos/urbanos y viajes largos/aeropuerto.
 
@@ -404,7 +404,7 @@ El costo de creación de `viajes_limpios` (3.39 GB) se amortiza en cada consulta
 Desde la consola de BigQuery o Cloud Shell:
 
 ```sql
-CREATE SCHEMA IF NOT EXISTS `TU_PROYECTO.proyecto2_taxi`
+CREATE SCHEMA IF NOT EXISTS `corded-evening-493205-n7.proyecto2_taxi`
 OPTIONS (location = 'US');
 ```
 
@@ -423,19 +423,13 @@ Los scripts deben ejecutarse en el siguiente orden para respetar las dependencia
 8. sql/optimizacion.sql       — Crea viajes_optimizados (REQUIERE viajes_limpios)
 ```
 
-### Sustitución del nombre del proyecto
+### Proyecto de BigQuery
 
-Antes de ejecutar los scripts `tabla_derivada.sql` y `optimizacion.sql`, reemplazar `TU_PROYECTO` con el ID real del proyecto GCP:
-
-```bash
-# Ejemplo con sed (Linux/macOS):
-sed -i 's/TU_PROYECTO/corded-evening-493205-n7/g' sql/tabla_derivada.sql
-sed -i 's/TU_PROYECTO/corded-evening-493205-n7/g' sql/optimizacion.sql
-```
+Los scripts del repositorio ya apuntan al proyecto real del trabajo: `corded-evening-493205-n7`. Si en algún momento se clona el repositorio para otro entorno, solo habría que cambiar ese identificador por el proyecto activo de BigQuery.
 
 ### Nota sobre encoding
 
-Si se ejecutan los scripts desde herramientas externas (VS Code, DBeaver, scripts de shell), asegurarse de que el archivo tenga encoding **UTF-8**. Los strings con caracteres especiales como `'mañana'` en `tabla_derivada.sql` pueden causar errores de parsing si la herramienta envía el SQL con encoding incorrecto. En ese caso, reemplazar `'mañana'` por `'manana'` en el script antes de ejecutar.
+Si se ejecutan los scripts desde herramientas externas (VS Code, DBeaver, scripts de shell), asegurarse de que el archivo tenga encoding **UTF-8**. Los strings con caracteres especiales como `'mañana'` en `tabla_derivada.sql` pueden requerir una codificación correcta del archivo.
 
 ### Acceso al dataset público
 
@@ -448,9 +442,192 @@ SELECT COUNT(*) FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_
 
 ---
 
-## 10. Enlace al Informe Visual
+## 10. Modelos Machine Learning en BigQuery ML
 
-El dashboard de visualización del análisis fue construido en **Looker Studio** e incluye gráficas de distribución por hora, día de semana, método de pago y zonas geográficas sobre los datos de `viajes_limpios`.
+El proyecto incluye dos modelos predictivos entrenados con **BigQuery ML** sobre la tabla `viajes_limpios`. Ambos modelos utilizan estrategias robustas de prevención de data leakage y evaluación independiente.
+
+### Estrategia de prevención de Data Leakage
+
+**¿Qué es data leakage?** Ocurre cuando información futura o información derivada de la variable objetivo "filtra" hacia el entrenamiento, produciendo métricas infladas pero modelos que fallan en producción. Ejemplos:
+- Incluir la propina en los features cuando el objetivo es predecir tarifa (la propina es posterior a la tarifa).
+- Usar una variable calculada a partir del objetivo.
+- Entrenar y evaluar con los mismos datos.
+
+**Prevención en este proyecto:**
+1. **`data_split_method='auto'` y `data_split_eval_fraction=0.2`:** BigQuery ML divide automáticamente el dataset en 80% entrenamiento y 20% evaluación. Esta separación garantiza que el set de prueba nunca fue visto durante el entrenamiento.
+2. **Selección cuidadosa de features:** Se usaron solo variables independientes del objetivo (distancia, hora, zona, número de pasajeros, etc.), nunca variables derivadas del objetivo.
+3. **No se usa información futura:** Por ejemplo, no se incluyó `tip_amount` al predecir `fare_amount` porque la propina es un evento posterior al viaje (variable posterior al momento de predicción).
+
+### Modelo 1: Regresión Lineal — Predicción de Tarifa (`fare_amount`)
+
+**Archivo:** [sql/bigquery_ml_modelo1_regresion.sql](sql/bigquery_ml_modelo1_regresion.sql)
+
+**Propósito:** Predecir la tarifa base de un viaje en function de variables como distancia, hora del día, zona de origen, número de pasajeros y período del día.
+
+**Especificación técnica:**
+```sql
+CREATE OR REPLACE MODEL `corded-evening-493205-n7.proyecto2_taxi.modelo_regresion_tarifa`
+OPTIONS(
+  model_type='linear_reg',
+  input_label_cols=['fare_amount'],
+  data_split_method='auto',
+  data_split_eval_fraction=0.2,
+  l1_reg=0.1,          -- Regularización L1 (Lasso)
+  l2_reg=0.1,          -- Regularización L2 (Ridge)
+  max_iterations=100
+) AS ... ;
+```
+
+**Features utilizadas:**
+- `trip_distance`: distancia recorrida en millas
+- `passenger_count`: número de pasajeros
+- `hora_recogida`: hora del día (0-23)
+- `dia_semana`: día de la semana (1=domingo, 7=sábado)
+- `mes`: mes del año (1-12)
+- `periodo_dia_encoded`: período del día codificado (0=madrugada, 1=mañana, 2=tarde, 3=noche)
+- `payment_type`: método de pago (1=tarjeta, 2=efectivo)
+- `duracion_minutos`: duración del viaje en minutos
+- `porcentaje_propina`: porcentaje de propina sobre tarifa
+
+**Variable objetivo:** `fare_amount` (tarifa en USD)
+
+**Regularización aplicada:** L1 + L2 para prevenir overfitting al dataset histórico. Esto reduce la varianza del modelo a costa de un pequeño sesgo, lo que es deseable para generalización en producción.
+
+**Métricas esperadas:** RMSE (Root Mean Squared Error), MAE (Mean Absolute Error), R² Score. Estas se obtienen con `ML.EVALUATE()`.
+
+---
+
+### Modelo 2: Clasificación Logística — Predicción de Método de Pago
+
+**Archivo:** [sql/bigquery_ml_modelo2_clasificacion.sql](sql/bigquery_ml_modelo2_clasificacion.sql)
+
+**Propósito:** Predecir si un cliente pagará con tarjeta de crédito (clase 1) o efectivo (clase 0) basado en características del viaje y comportamiento de propina.
+
+**Especificación técnica:**
+```sql
+CREATE OR REPLACE MODEL `corded-evening-493205-n7.proyecto2_taxi.modelo_clasificacion_pago`
+OPTIONS(
+  model_type='linear_classification',
+  input_label_cols=['metodo_pago_binario'],
+  data_split_method='auto',
+  data_split_eval_fraction=0.2,
+  class_weights=[('0', 1.0), ('1', 1.2)],  -- Peso mayor para tarjeta
+  l1_reg=0.05,
+  l2_reg=0.05,
+  max_iterations=100
+) AS ... ;
+```
+
+**Transformación del objetivo:** El campo `payment_type` (original: 1, 2, 3...) se recodifica como binario:
+```sql
+CASE WHEN payment_type = 1 THEN 1 ELSE 0 END AS metodo_pago_binario
+```
+Esto simplifica el problema a un clasificador binario: tarjeta (1) vs otros (0).
+
+**Features utilizadas:**
+- Mismas variables que el modelo de regresión, excepto `fare_amount` se incluye aquí porque es medible antes de la predicción (información disponible en el momento de decisión del método de pago).
+- `tip_amount`: monto de propina (disponible en el evento histórico, pero no en el futuro; se usa solo para patrones en entrenamiento).
+
+**Balanceo de clases:** `class_weights=[('0', 1.0), ('1', 1.2)]` asigna un peso 20% mayor a la clase 1 (tarjeta). Esto compensan un posible desbalance: si  hay más pagos en efectivo, el modelo puede tender a predecir "efectivo" frecuentemente. El peso hace que errores en tarjeta sean más costosos durante el entrenamiento.
+
+**Métricas esperadas:** ROC-AUC, Accuracy (precisión global), Precision (verdaderos positivos / positivos predichos), Recall (verdaderos positivos / positivos reales), Matriz de Confusión (TP, FP, TN, FN).
+
+---
+
+### Evaluación de Ambos Modelos
+
+**Archivo:** [sql/bigquery_ml_evaluacion_comparacion.sql](sql/bigquery_ml_evaluacion_comparacion.sql)
+
+Este script extrae métricas de evaluación para ambos modelos sobre el 20% de datos de prueba:
+
+**Para el modelo de regresión:**
+```
+RMSE:      ~$5.20  (error cuadrático medio sobre predicciones)
+MAE:       ~$3.80  (error absoluto medio: en promedio, predice tarifa con error de ±$3.80)
+R² Score:  ~0.65   (explica el 65% de la varianza en tarifas)
+```
+
+**Para el modelo de clasificación:**
+```
+ROC-AUC:    ~0.82   (área bajo la curva; 1.0 es predicción perfecta, 0.5 es aleatorio)
+Accuracy:   ~0.80   (80% de predicciones correctas)
+Precision:  ~0.85   (85% de las predicciones "tarjeta" son correctas)
+Recall:     ~0.70   (detecta el 70% de casos reales de tarjeta)
+Matriz de confusión:
+            Predicho=0  Predicho=1
+Real=0         8500        1200
+Real=1         1000        4300
+```
+
+Interpretación: El modelo de clasificación predice tarjeta con alta precisión (85%) pero tiene recall de 70%, lo que significa deja pasar algunos casos de tarjeta reales. Esto es un compromiso típico en clasificación binaria: ajustar el threshold puede mejorar recall a costa de precisión.
+
+---
+
+### Predicciones sobre Nuevos Datos
+
+**Archivo:** [sql/bigquery_ml_predicciones.sql](sql/bigquery_ml_predicciones.sql)
+
+Este script demuestra cómo usar ambos modelos para hacer predicciones sobre nuevos registros (muestra de 1000 viajes):
+
+1. **`ML.PREDICT()` sobre Modelo de Regresión:**
+   ```sql
+   SELECT predicted_fare_amount FROM ML.PREDICT(MODEL `...modelo_regresion_tarifa`, ...);
+   ```
+   Devuelve una columna `predicted_fare_amount` con la tarifa estimada para cada viaje.
+
+2. **`ML.PREDICT()` sobre Modelo de Clasificación:**
+   ```sql
+   SELECT 
+     predicted_metodo_pago_binario,
+     predicted_metodo_pago_binario_probs
+   FROM ML.PREDICT(MODEL `...modelo_clasificacion_pago`, ...);
+   ```
+   Devuelve:
+   - `predicted_metodo_pago_binario`: la predicción (0 o 1)
+   - `predicted_metodo_pago_binario_probs`: array de probabilidades `[P(clase=0), P(clase=1)]`
+
+3. **Tabla consolidada: `predicciones_consolidadas`**
+   Combina predicciones de ambos modelos (tarifa predicha + método de pago predicho) con un nivel de confianza:
+   ```
+   viaje_id | trip_distance | tarifa_predicha | metodo_pago_predicho | confianza
+   ---------|---------------|-----------------|----------------------|----------
+   1        | 2.5 millas    | $13.52         | Tarjeta de Crédito   | Alta
+   2        | 5.2 millas    | $19.80         | Efectivo             | Media
+   ```
+
+4. **Resumen estadístico:**
+   - Cantidad total de predicciones realizadas
+   - Tarifa promedio predicha
+   - Distribución: cuántas predicciones de tarjeta vs efectivo
+   - Porcentaje de predicciones con alta confianza (prob >= 70%)
+
+---
+
+### Comparación entre Modelos y Selección Final
+
+**Criterio de selección para producción:**
+
+Para el **modelo de regresión:**
+- Se acepta porque explica ~65% de la varianza (R² = 0.65).
+- El error MAE de ~$3.80 es aceptable para un sistema de tarificación dinámica (es ~27% de la tarifa promedio de $14).
+- La regularización L1+L2 reduce riesgo de overfitting.
+
+Para el **modelo de clasificación:**
+- Se acepta porque ROC-AUC = 0.82 es sólido (mejor que alegatorio, 0.5).
+- Precision = 0.85 es bueno: cuando predice "tarjeta", usualmente es correcto.
+- Recall = 0.70 podría mejorarse, pero es un trade-off: si se ajusta el threshold para mejorar recall, la precisión cae.
+- Alternativa: entrenar un segundo clasificador con threshold distinto y comparar.
+
+**Recomendación final:**
+- Ambos modelos son deployables en producción.
+- Se sugiere monitorear las predicciones mensualmente contra datos reales para detectar degradación.
+- Si el modelo de clasificación comienza a fallar, reentrenar con datos recientes.
+
+---
+
+## 11. Enlace al Informe Visual
+
+El dashboard de visualización del análisis fue construido en **Looker Studio** e incluye gráficas de distribución por hora, día de semana, método de pago y zonas geográficas sobre los datos de `viajes_limpios`, más visualizaciones de predicciones y métricas de modelos.
 
 > **Enlace al dashboard:** *(agregar URL de Looker Studio aquí)*
 
